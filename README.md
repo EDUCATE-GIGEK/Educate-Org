@@ -2,7 +2,7 @@
 A multifaceted application that helps to preserve the history of dying cultures.
 
 ## Problem
-Certain cultures are going extinct because they are associated with less prominent people groups. Understanding and preserving different of these cultures is neccessary to make fair global and internal policies for governing humans. This application is an attempt to support the policy-making proccess by empowering people with information.
+Certain cultures are going extinct because they are associated with less prominent people groups. Understanding and preserving different cultures is necessary to make fair global and internal policies for governing humans. This application aims to support the policy-making process by providing people with information.
 
 <a href=""></a>
 
