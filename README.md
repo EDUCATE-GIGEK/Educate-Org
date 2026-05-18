@@ -16,15 +16,15 @@ Certain cultures are going extinct because they are associated with less promine
 ## Similar Projects
 ### Language formalization and preservation
 - The Endangered Languages Project (ELP) is an independent, global nonprofit originally developed by Google to support language revitalization and documentation. It offers an interactive, multimedia-rich hub where users can access reliable data, share resources like audio and video files, and collaborate to preserve threatened dialects. ELP's core data is powered by the Endangered Languages Catalogue <a href="https://www.endangeredlanguages.com/language-search-map">(ELCat)</a>.
-- <a href="#">CMU's Universal Language Model</a> -->  Researchers at CMU's Language Technologies Institute (LTI) pioneered techniques to create single, universal translation models that cover thousands of languages. This work allows models to share semantic understanding across languages, boosting performance and sample efficiency for low-resource languages -- to access resources, one must login.
+- CMU's Universal Language Model -->  Researchers at CMU's Language Technologies Institute (LTI) pioneered techniques to create single, universal translation models that cover thousands of languages. This work allows models to share semantic understanding across languages, boosting performance and sample efficiency for low-resource languages -- to access resources, one must login/be a student, I think.
 - <a href="https://lacunafund.org/datasets/language/">Lacuna Fund</a> --. The Lacuna Fund is a global collaborative effort that provides funding and resources to researchers and social entrepreneurs in low- and middle-income regions. Its goal is to create, expand, and maintain openly accessible, labeled training datasets to reduce bias in machine learning and AI. The fund helps tailor artificial intelligence to serve marginalized and unrepresented communities. Their work spans four core domains: Agriculture, Climate, Health:, and <Bold>Low-Resource Languages: Ensuring that artificial intelligence can understand and accurately communicate in regional and indigenous languages</Bold>.
 
-### Multilingual speech-to-speech and text translation 
-- Meta's No Language Left Behind (NLLB) project --> it's an open-source translation model covering 200+ languages, including African languages like Igbo and Hausa.
-- Masakhane  --> a grassroots NLP community specifically building language technology for African languages, and they maintain open datasets and models.
-- Mozilla Common Voice is a crowdsourced platform for building speech datasets in underrepresented languages.
-- Meta's SeamlessM4T handles translation across speech and text modalities.
-- Google's Universal Speech Model (USM) trained on 300+ languages is another reference architecture.
+### Multilingual speech-to-speech and text translation https://ai.meta.com/research/no-language-left-behind/
+- Meta's <a href="https://ai.meta.com/research/no-language-left-behind/">No Language Left Behind (NLLB)</a> project --> it's an open-source translation model covering 200+ languages, including African languages like Igbo and Hausa.
+- <a href="https://www.masakhane.io/">Masakhane</a>  --> a grassroots NLP community specifically building language technology for African languages, and they maintain open datasets and models. (Very Useful)
+- Mozilla Common Voice is a crowdsourced platform for building speech datasets in underrepresented languages. (I'm not sure their datasets are open source)
+- Meta's <a href="https://github.com/facebookresearch/seamless_communication">SeamlessM4T</a> handles translation across speech and text modalities.
+- Google's <a href="https://github.com/kyegomez/USM">Universal Speech Model (USM)</a> trained on 300+ languages is another reference architecture.
 
 ### History education platforms (Global South emphasis)
 - The African Leadership University's content initiatives
