@@ -1,17 +1,20 @@
-# <p>Ịmụ-Asụsụ-v1-frontend</p>
-A multifaceted application that helps to preserve the history of dying cultures.
+# <bold>Ịmụ-Asụsụ</bold>
+Cultures are disappearing — not because they lack value, but because the people who carry them lack visibility.
 
-## Problem
-Certain cultures are going extinct because they are associated with less prominent people groups. Understanding and preserving different cultures is necessary to make fair global and internal policies for governing humans. This application aims to support the policy-making process by providing people with information.
+Educate' is a web application that preserves and presents the histories of underrepresented peoples in a way that is accessible, engaging, and accurate. Powered by adaptive AI, the platform helps users explore cultural knowledge through intuitive navigation and communication tools designed to serve diverse communities.
 
-<a href=""></a>
+We build this because equitable governance depends on informed citizens. When policymakers and the public understand the full breadth of human culture, they make fairer decisions — for everyone. Educate' exists to put that understanding within reach.
 
 
 ## Goals
-- Develop a system (an AI/ML) that specializes in and accelerates the process of using linguistic standards to formalize dying languages
-- To develop a system for learning human history that supports all people (especially people in the global south)
-- Future Work: Develop a system (an <a href="https://github.com/EDUCATE-GIGEK/aiv1-Wolfgang">AI</a>) that specializes in modifying the layout of our application to meet the needs of our target audience. This AI can move through the application to specific pages of the user interface based on a user's prompt.
-- Develop an <a href="https://github.com/EDUCATE-GIGEK/aiv1-Wolfgang">ML</a> model  that can translate from one audio input to multiple audio and text outputs; for example, English speech/text --> Spanish speech and text, and Spanish speech/text --> Igbo speech and text, and Igbo speech/text --> Romanian speech and text, and Hausa speech/text --> Romanian speech and text, e.t.c.  The target is languages from countries in the global south.
+**Inclusive History Education** — Develop an interactive learning platform for human history that serves all people, with a particular focus on communities in the Global South whose histories are underrepresented in existing educational resources.
+
+**Multilingual Translation Engine** — Develop an ML model capable of translating a single audio or text input into multiple language outputs (both speech and text). For example: English → Spanish, Spanish → Igbo, Igbo → Romanian, Hausa → Romanian. Priority targets are languages spoken in the Global South. ([Wolfgang ML](https://github.com/EDUCATE-GIGEK/aiv1-Wolfgang))
+
+**Adaptive Interface AI** *(Future Work)* — Develop an AI agent ([Wolfgang](https://github.com/EDUCATE-GIGEK/aiv1-Wolfgang)) that dynamically modifies the application's layout and navigates users to specific pages based on natural language prompts, adapting the experience to the needs of diverse audiences.
+
+**Language Formalization** — Build an AI/ML system that accelerates the process of applying linguistic standards to formalize endangered languages, creating structured written frameworks for languages at risk of extinction.
+
 
 ## Similar Projects
 ### Language formalization and preservation
