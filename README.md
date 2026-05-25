@@ -1,4 +1,4 @@
-# Proj 1: 
+# Proj 1 
 **<bold>Ịmụ-Asụsụ</bold>**
 Cultures are disappearing — not because they lack value, but because the people who carry them lack visibility.
 
