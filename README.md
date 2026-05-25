@@ -14,7 +14,7 @@ Develop an interactive learning platform for human history that serves all peopl
 
 **Application**
 - <a href="https://github.com/EDUCATE-GIGEK/Backend-Imu-Asusu/blob/main/README.md">Imu-Asusu Backend</a>
-- <a href="">Imu-Asusu Frontend</a>
+- <a href="https://github.com/EDUCATE-GIGEK/Frontend-Imu-Asusu">Imu-Asusu Frontend</a>
 
 
 **Similar Projects for History**
