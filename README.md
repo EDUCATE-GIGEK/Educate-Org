@@ -13,7 +13,7 @@ Develop an interactive learning platform for human history that serves all peopl
 
 
 **Application**
-- <a href="https://github.com/EDUCATE-GIGEK/Backend-Imu-Asusu/blob/main/README.md">Imu-Asusu Backend</a>
+- <a href="https://github.com/EDUCATE-GIGEK/Backend-Imu-Asusu">Imu-Asusu Backend</a>
 - <a href="https://github.com/EDUCATE-GIGEK/Frontend-Imu-Asusu">Imu-Asusu Frontend</a>
 
 
@@ -92,3 +92,7 @@ Develop an interactive learning platform for human history that serves all peopl
 **Goals**
 
 **Application**
+- <a href="https://github.com/EDUCATE-GIGEK/REU_Back_END">REU Backend</a>
+- <a href="https://github.com/EDUCATE-GIGEK/REU_Front_END">REU Frontend</a>
+- <a href="https://github.com/EDUCATE-GIGEK/REU_SERVICES">REU API Services</a>
+- <a href="#">REU AI</a>
