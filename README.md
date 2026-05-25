@@ -1,5 +1,6 @@
 # Proj 1 
 **<bold>Ịmụ-Asụsụ</bold>**
+
 Cultures are disappearing — not because they lack value, but because the people who carry them lack visibility.
 
 Educate' is a web application that preserves and presents the histories of underrepresented peoples in a way that is accessible, engaging, and accurate. Powered by adaptive AI, the platform helps users explore cultural knowledge through intuitive navigation and communication tools designed to serve diverse communities.
