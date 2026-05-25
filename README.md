@@ -1,4 +1,5 @@
-# <bold>Ịmụ-Asụsụ</bold>
+# Proj 1: 
+**<bold>Ịmụ-Asụsụ</bold>**
 Cultures are disappearing — not because they lack value, but because the people who carry them lack visibility.
 
 Educate' is a web application that preserves and presents the histories of underrepresented peoples in a way that is accessible, engaging, and accurate. Powered by adaptive AI, the platform helps users explore cultural knowledge through intuitive navigation and communication tools designed to serve diverse communities.
@@ -45,5 +46,8 @@ We build this because equitable governance depends on informed citizens. When po
 - For layout adaptation specifically, research on <BOLD>responsive</BOLD> design AI
 - The <a href="https://www.udemy.com/course/accessibility-a11y-testing-for-web-mobile-hands-on-guide/?utm_campaign=PMax_la.EN_cc.US_Pixis&utm_source=google&utm_medium=paid-search&portfolio=USA&utm_audience=mx&utm_tactic=pmax&utm_term=_._ag__._ad__._kw_&utm_content=x&funnel=&test=&gad_source=1&gad_campaignid=23672199002&gbraid=0AAAAADROdO02R_EsMchF13E5AMIS7fHu3&gclid=Cj0KCQjwzqXQBhD2ARIsAKrIeU-huXI9DW93vweyliJhP-YMXfddZ7XihFSz5RLlDdkPuA2Loa5BOaoaAsvlEALw_wcB&couponCode=PMNVD1525">A11y</a> Project for accessibility standards.
 
+
+# Proj 2
+**Grad Schools/REU**
 
 
