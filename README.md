@@ -5,11 +5,10 @@ Cultures are disappearing — not because they lack value, but because the peopl
 
 Educate' is a web application that preserves and presents the histories of underrepresented peoples in a way that is accessible, engaging, and accurate. Powered by adaptive AI, the platform helps users explore cultural knowledge through intuitive navigation and communication tools designed to serve diverse communities.
 
-We are building this because equitable governance depends on informed citizens. When policymakers and the public understand the full breadth of human culture, they make fairer decisions — for everyone. Educate' exists to put that understanding within reach.
 
-**Goals**
 
-Develop an interactive learning platform for human history that serves all people, with a particular focus on communities in the Global South whose histories are underrepresented in existing educational resources.
+**Goals for v1**
+Develop an interactive learning platform application to preserve information about the Nigerian Ikwere-igbo ethnic group.
 
 
 **Application**
