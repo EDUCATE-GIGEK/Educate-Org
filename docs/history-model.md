@@ -1,6 +1,6 @@
 # History Data Model — Conceptual Spec
 
-**Status:** Draft / proposal. Vocabulary and relationships only — **no SQL yet**. The goal is to lock the conceptual model and its controlled vocabularies first, gather a representative sample of real Ikwerre data against it, let that sample refine the model, and *then* write migrations.
+**Status:** **Validated (2026-07-19)** against the first Ikwerre sample (`Backend-Imu-Asusu/data/collection/ikwerre/`). Sections below reflect the sample-driven refinements; the authoritative summary is the tiered **[final entity list](#9-validated-final-entity-list-tiered)** at the end. Ready for the Tier-1 migration (raw PostgreSQL in the backend's `SQL/`).
 
 **Scope:** the shared data model behind Ịmụ-Asụsụ (and future Educate projects) for representing the history and culture of any people group. This document is the cross-project source of truth; the implementing migrations will live in the backend repo (the future self-hosted database + API), not the frontend.
 
@@ -85,41 +85,40 @@ Five page hooks today (`useStatePage`, `useCountryPage`, `useLocalGovernmentPage
 
 Today `history` is one flat table with a free-text `category` and a loose `entry` blob. Evolve it into a small **knowledge graph**.
 
-### `entries` — typed units of knowledge
+### `entries` — typed units of knowledge (**replaces the flat `history` table**)
 | column | notes |
 | --- | --- |
 | `id` | |
-| `entry_type` | controlled enum, doubles as the "best-aspect" lenses — §5 |
-| `title` | |
-| `summary` | short, teachable |
-| `body` | rich text / jsonb |
-| `significance` | why it matters |
-| `is_endangered` | boolean (dying craft, fading oral lit) |
-| `is_written` | boolean (written vs oral transmission) |
-| `status` | `draft` \| `in_review` \| `published` |
-| **time** | `period_start`, `period_end`, `date_precision` (`year`\|`decade`\|`century`\|`era`\|`relative`), `is_approximate`, `era` (§5) |
-| **links** | `place_id?`, `people_id?` — an entry attaches to a place, a people, or both |
+| `entry_type` | controlled enum, the "best-aspect" lenses — §5 |
+| `title`, `summary`, `body`, `significance` | content (short teachable summary; full text in `body`) |
+| `period_start`, `period_end` | may be null for oral tradition |
+| `date_precision` | `year`\|`decade`\|`century`\|`era`\|`relative` |
+| `is_approximate` | boolean |
+| `period_note` | free text for relative dating, e.g. "≈4 generations before present" *(validation: `relative` precision lost its reference point without this)* |
+| `era` | §5 |
+| `place_id?`, `people_id?` | FKs into the two trees — **this is what collects a group's entries** (see §3.1) |
+| `is_endangered`, `is_written` | boolean |
+| `is_restricted` | boolean — sacred/secret knowledge, collected but **not for public display** *(validation gap)* |
+| `verification_status` | `unverified`\|`verified`\|`disputed` — **epistemic** state of the claim |
+| `workflow_status` | `draft`\|`in_review`\|`published` — **editorial** pipeline |
 
-Fuzzy time flags let "founded ~4 generations ago" sit honestly on a timeline.
+Two distinct status fields (a validation finding): whether a claim is *trusted* is separate from where it is in the *editorial* pipeline. Fuzzy time flags + `period_note` let "founded ~4 generations ago" sit honestly on a timeline.
 
-### `entry_relationships` — the connective tissue (the key table)
-| column | notes |
-| --- | --- |
-| `from_entry` | |
-| `to_entry` | |
-| `relation_type` | §5 — caused, followed_by, part_of, founded_by … |
+### 3.1 Belonging vs connecting — two different links
+- **Belonging** (assemble "all of Ikwerre's history"): filter `entries` by `people_id` (and its descendant clans in the `peoples` tree) and/or `place_id`. This is what gathers a group's whole set — it is *not* a relationship.
+- **Connecting** (how those entries relate): the join tables below. This is what makes the set navigable (timeline threads, knowledge graph).
 
-This is what powers the timeline's connection threads and the knowledge-graph view. Example chain:
-> `migration` **caused** `settlement_founding` **founded_by** `figure(Eze …)` **who instituted** `festival` **that commemorates** the `migration`.
+### `entry_relationships` — the entry↔entry graph (the key connective table)
+`from_entry_id`, `to_entry_id`, `relation_type` (§5). Powers the timeline threads and graph view. Relationships that involve a **person** live in `entry_figures` / `figure_relationships`, not here.
 
-### `figures` — people as first-class
-Persons (Eze, founder, warrior, priest, hero): `name`, `role`, lifespan, `people_id`, plus self-referencing `figure_relationships` (`parent_of`, `succeeded_by`, `married`) for genealogies and succession lines.
+### `figures` — people as their own entity (**not** an entry_type)
+`figures` (`name`, `role`, `people_id`, `birth_note`, `death_note`, `is_restricted`) + `figure_relationships` (`parent_of` / `succeeded_by` / `married`) for genealogy & succession + `entry_figures` (`entry_id`, `figure_id`, `role`: `founded_by` / `about` / `led_by`) linking people to the entries they appear in. *(Validation: `figure` as an entry_type couldn't hold lifespan or figure↔figure links.)*
 
-### Language (first-class — the Ikwerre language is under pressure)
-`languages`, `dialects`, `lexicon` (word, meaning, **audio**, example sentence), orthography notes, endangerment status.
+### Languages — their own entities (**not** an entry_type)
+`languages` (`name`, `iso_code`, `classification`, `endangerment_status`, `people_id`) + `dialects` + `lexicon` (`word`, `pronunciation`, `meaning`, `example_sentence`, `audio_media_id`).
 
 ### `media`
-`type` (`image`\|`audio`\|`video`\|`map`\|`document`), `url`, `caption`, `source_id`, linked to entries / figures / places.
+`media` (`media_type`, `url`, `caption`, `source_id`, `is_restricted`) + an `entry_media` join.
 
 ---
 
@@ -163,9 +162,13 @@ This model is also what a trustworthy AI fact-checker grounds against.
 
 **`people.designation`** (starter): Ethnic Group, Nation, Tribe, Clan, Lineage, House, Community, Age-grade.
 
-**`entry_type`** (starter — the cultural lenses): origin_tradition, migration, settlement_founding, institution, title, deity_spirit, shrine_site, cosmology, festival, rite_of_passage, masquerade, proverb, folktale, praise_name, naming_custom, craft, architecture, attire, cuisine, music_dance, economy, agriculture, trade_route, marriage_custom, lineage, figure, event, conflict, alliance, colonial_encounter, modern_identity, diaspora.
+**`entry_type`** (the cultural lenses): origin_tradition, migration, settlement_founding, institution, deity_spirit, shrine_site, cosmology, festival, rite_of_passage, masquerade, proverb, folktale, praise_name, naming_custom, craft, architecture, attire, cuisine, music_dance, economy, agriculture, trade_route, marriage_custom, kinship, event, conflict, alliance, colonial_encounter, modern_identity, diaspora. *(Validation removed `figure`, `language`, and `lineage`: figures and languages are their own entities, and `Lineage`/`Clan` are `people.designation` values, not entry types.)*
 
-**`relation_type`**: caused, followed_by, part_of, founded_by, practiced_by, located_at, derived_from, commemorates, succeeded_by, in_conflict_with, related_to.
+**entry `relation_type`** (entry↔entry): caused, followed_by, part_of, commemorates, **contradicts** *(for disputed accounts)*, derived_from, related_to.
+**figure `relation_type`** (figure↔figure): parent_of, succeeded_by, married, sibling_of.
+**entry_figures `role`** (entry↔figure): founded_by, led_by, about, mentions, attributed_to.
+
+**`verification_status`**: unverified, verified, disputed.  **`workflow_status`**: draft, in_review, published.
 
 **`era`**: pre-colonial, colonial, post-independence, contemporary.
 
@@ -173,24 +176,23 @@ This model is also what a trustworthy AI fact-checker grounds against.
 
 ## 6. Migration path from the current schema
 
-This is an **evolution, not a teardown**:
+An **evolution, not a teardown**, built in the two tiers of §9:
 
-1. Create `places` + `peoples` + `people_places`; backfill from `continents`/`countries`/`states`/`local_governments` (→ `places`) and `ethnic_groups`/`tribes` (→ `peoples`), assigning each a `designation`.
-2. Add `entry_type`, time columns, `status` to `history`; rename/reshape toward `entries`. Backfill the ~6 existing rows.
-3. Add `entry_relationships`, `sources`, `entry_sources`, `figures`, `media`, `languages`/`lexicon` as new tables.
-4. Repoint `history`'s four geo/ethnic FKs to the two generic `place_id` / `people_id` links.
-5. Preserve RLS on every new table.
+1. **Tier 1 first** — create `places` + `peoples` + `people_places`; backfill from `continents`/`countries`/`states`/`local_governments` (→ `places`) and `ethnic_groups`/`tribes` (→ `peoples`) with a `designation` each. Reshape `history` → `entries` (add `entry_type`, time columns, `period_note`, `is_restricted`, `verification_status`, `workflow_status`; repoint the four geo/ethnic FKs to `place_id`/`people_id`; backfill the ~6 rows). Add `entry_relationships`, `sources`, `entry_sources`.
+2. **Tier 2 next** — `figures` + `figure_relationships` + `entry_figures`; `languages`/`dialects`/`lexicon`; `media` + `entry_media`.
 
-Migrations land in the **backend repo**; the live Supabase project keeps running throughout (schema changes are additive first, destructive last).
+Written as raw PostgreSQL in the backend's `SQL/`. If also applied to the live Supabase project, layer RLS policies on top; the core DDL is portable and unaffected.
 
 ---
 
 ## 7. Open decisions
 
+**Resolved by the 2026-07-19 validation pass:** figures & languages are their own entities (not entry_types); two status fields (`verification_status` + `workflow_status`); an `is_restricted` flag; explicit typed join tables (not one polymorphic relationships table); `contradicts` relation for disputed accounts.
+
+Still open:
 1. **`designation` strictness** — enum vs **lookup table (recommended)** vs free text.
 2. **Table naming** — `places` / `peoples` acceptable? 
 3. **Contested-history presentation** — **multi-perspective + sourced (recommended)** vs a single curated canonical view. Note: the Educate-Org README frames the group as the "Ikwere-Igbo ethnic group," which is *itself* a position on a contested question (see §8). The provenance model lets us hold that framing while still showing the evidence.
-4. **First build focus** — (a) schema spec + migration, (b) Ikwerre data-gathering plan, (c) timeline/graph prototype.
 
 ---
 
@@ -222,3 +224,36 @@ Triangulate three source types, each recorded in `sources`:
 - Design/UX references for the eventual visualizations: **Histropedia** (histropedia.com) and **Chronas** (chronas.org) — timeline- and map-based history exploration (already listed in the Educate-Org README).
 
 > **On citations:** no reference in this platform's *content* should be asserted from memory. Each becomes a row in `sources` with a real, checkable citation, or it stays `unverified`. Fabricated citations are worse than none — they poison the reliability the platform exists to provide.
+
+---
+
+## 9. Validated final entity list (tiered)
+
+The authoritative table list after validating the model against the first Ikwerre sample. **15 tables; the 7 Tier-1 tables alone deliver a working experience** (collect a group's entries, connect them, source them). Build order = tiers.
+
+### Tier 1 — core (build first) · 7 tables
+| table | key columns | purpose |
+| --- | --- | --- |
+| `places` | id, parent_id, name, `designation`, level_rank, iso_code, general_info | recursive geography |
+| `peoples` | id, parent_id, name, `designation`, general_info | recursive people groups |
+| `people_places` | people_id, place_id, `relationship` | a people spans many places |
+| `entries` | id, `entry_type`, title, summary, body, significance, period_start, period_end, `date_precision`, is_approximate, period_note, era, **place_id**, **people_id**, is_endangered, is_written, is_restricted, `verification_status`, `workflow_status`, timestamps | the unit of knowledge (**replaces `history`**) |
+| `entry_relationships` | from_entry_id, to_entry_id, `relation_type`, note | the entry↔entry graph |
+| `sources` | id, `source_type`, author_or_informant, title, year, citation_or_url, reliability_tier, + oral: informant_name, role_standing, community, interview_date, location, language, consent_given | provenance records |
+| `entry_sources` | entry_id, source_id, `confidence`, `verification_status`, reviewer, note | many-to-many; per-claim reliability |
+
+*Belonging* to a group = `entries.people_id`; *connecting* entries = `entry_relationships`.
+
+### Tier 2 — rich culture (add next) · 8 tables
+| table | key columns | purpose |
+| --- | --- | --- |
+| `figures` | id, name, role, people_id, birth_note, death_note, is_restricted, general_info | persons (Eze, founders) |
+| `figure_relationships` | from_figure_id, to_figure_id, `relation_type` | genealogy & succession |
+| `entry_figures` | entry_id, figure_id, `role` | link entries to the people in them |
+| `languages` | id, name, iso_code, classification, endangerment_status, people_id | first-class language |
+| `dialects` | id, language_id, name, region_note | dialect variation |
+| `lexicon` | id, language_id, dialect_id, word, pronunciation, meaning, example_sentence, audio_media_id | words + audio |
+| `media` | id, media_type, url, caption, source_id, is_restricted | images/audio/video/maps |
+| `entry_media` | entry_id, media_id, caption | attach media to entries |
+
+*`figures` and `lexicon` get their own lightweight `figure_sources` / `lexicon_sources` joins when sourced — same pattern as `entry_sources`.*
