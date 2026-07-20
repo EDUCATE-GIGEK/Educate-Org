@@ -141,9 +141,12 @@ Because this history is under-documented in written records, **method matters mo
 | column | notes |
 | --- | --- |
 | `entry_id`, `source_id` | |
-| `confidence` | per claim |
-| `verification_status` | `verified` \| `unverified` \| `disputed` |
+| `stance` | what this source says about the claim: `supports` \| `contradicts` \| `mentions` |
+| `confidence` | how strongly this source backs it: `low` \| `medium` \| `high` |
 | `reviewer` | |
+| `note` | |
+
+The overall verified/disputed state is a rollup on `entries.verification_status` (shown in the UI); this join records what **each** source says, so a `disputed` entry is one with `supports` and `contradicts` sources.
 
 **Provenance discipline:**
 - A claim becomes `verified` only when **independent source types agree** (e.g. a scholarly text *and* an elder interview).
@@ -240,7 +243,7 @@ The authoritative table list after validating the model against the first Ikwerr
 | `entries` | id, `entry_type`, title, summary, body, significance, period_start, period_end, `date_precision`, is_approximate, period_note, era, **place_id**, **people_id**, is_endangered, is_written, is_restricted, `verification_status`, `workflow_status`, timestamps | the unit of knowledge (**replaces `history`**) |
 | `entry_relationships` | from_entry_id, to_entry_id, `relation_type`, note | the entry↔entry graph |
 | `sources` | id, `source_type`, author_or_informant, title, year, citation_or_url, reliability_tier, + oral: informant_name, role_standing, community, interview_date, location, language, consent_given | provenance records |
-| `entry_sources` | entry_id, source_id, `confidence`, `verification_status`, reviewer, note | many-to-many; per-claim reliability |
+| `entry_sources` | entry_id, source_id, `stance`, `confidence`, reviewer, note | many-to-many; per-source stance (verified/disputed rollup lives on `entries`) |
 
 *Belonging* to a group = `entries.people_id`; *connecting* entries = `entry_relationships`.
 
