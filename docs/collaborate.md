@@ -55,7 +55,9 @@ score = 10 × (the reader's saved regions the manuscript covers)
       +  0.1 × views
 ```
 
-The weights encode a judgment. **Region overlap dominates by design** — the whole point of the platform is that an instructor's own region is where the material matters, so a manuscript on a region they saved should outrank a popular manuscript on a region they did not. The community signals then rank among manuscripts that are equally on-topic, weighted by the effort each represents: forking a manuscript is a stronger endorsement than upvoting it, which is stronger than opening it.
+The weights encode a judgment. **Region overlap dominates by design** — the whole point of the platform is that an instructor's own region is where the material matters, so a manuscript on a region they saved should outrank a popular manuscript on a region they did not. The community signals then rank among manuscripts that are equally on-topic, weighted by the effort each represents: forking a manuscript is a stronger endorsement than upvoting it, which is stronger than reading it.
+
+All three signals count **people, not events**: one upvote and one view per educator, and an author's own reading of their own manuscript counts for nothing. A manuscript ten instructors each read once outranks one that a single instructor opened ten times, which is the comparison the ranking needs to be able to make.
 
 Ties break on recency, so an equally relevant newer contribution is never permanently buried under an older one — a new contributor's first manuscript can surface immediately.
 
@@ -81,7 +83,6 @@ These are separate features with their own designs, not omissions:
 
 - **Peer review** — commenting on, endorsing, or disputing another educator's manuscript.
 - **Co-authoring** — two people editing one manuscript. Collaborate's trust model is deliberately copy-based; shared editing needs its own.
-- **Unique-visitor view counts.** Today the view count is total opens, which an author can inflate by re-opening their own work. It is weighted lowest in the ranking for exactly this reason.
 - **Following an author or subscribing to new public manuscripts.**
 
 ---
@@ -90,8 +91,8 @@ These are separate features with their own designs, not omissions:
 
 Added to `manuscripts`: `is_public`, `fork_count`, `upvote_count`, `view_count`, `forked_from`.
 
-New table `manuscript_upvotes (manuscript_id, user_id)` — the primary key is what enforces one upvote per person, rather than the interface.
+New tables `manuscript_upvotes (manuscript_id, user_id)` and `manuscript_views (manuscript_id, user_id)` — in both, the primary key is what enforces one per person, rather than the interface. `manuscript_views` has no insert policy at all: a view can only be recorded by the server-side function, which is what makes the number trustworthy.
 
-The counts on `manuscripts` are denormalized because the page ranks and sorts on them for every card it draws; a trigger keeps the upvote count truthful.
+The counts on `manuscripts` are denormalized because the page ranks and sorts on them for every card it draws; a trigger keeps the upvote count truthful, and the view function only moves the counter on a reader's first open.
 
 Every write that touches a row the caller does not own — the upvote count, the view count, the source manuscript's fork count — goes through a server-side function. Row-level security on manuscripts stays owner-only for direct writes, which is what keeps an author's work theirs.
